@@ -1,0 +1,1638 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen de Códigos PLU / Artículos de Caja</title>
+    <style>
+        /* ==========================================================================
+           VARIABLES DE DISEÑO Y RESET (100% AUTOCONTENIDO SIN DEPENDENCIAS EXTERNAS)
+           ========================================================================== */
+        :root {
+            --bg-page: #f1f5f9;
+            --bg-card: #ffffff;
+            --bg-subtle: #f8fafc;
+            --bg-header: #0f172a;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --text-light: #94a3b8;
+            --border-color: #cbd5e1;
+            --border-soft: #e2e8f0;
+            --primary: #059669;
+            --primary-hover: #047857;
+            --primary-soft: #ecfdf5;
+            --primary-border: #6ee7b7;
+            --danger: #e11d48;
+            --danger-soft: #fff1f2;
+            --danger-border: #fda4af;
+            --warning: #d97706;
+            --warning-soft: #fffbeb;
+            --dark-btn: #1e293b;
+            --dark-btn-hover: #0f172a;
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --radius-sm: 8px;
+            --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08);
+            --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08);
+            --shadow-lg: 0 12px 28px rgba(15, 23, 42, 0.14);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ==========================================================================
+           ENCABEZADO PRINCIPAL
+           ========================================================================== */
+        .app-header {
+            background-color: var(--bg-header);
+            color: #ffffff;
+            padding: 1.25rem 1rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .header-inner {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .brand-group {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+        }
+
+        .brand-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: rgba(16, 185, 129, 0.18);
+            border: 1px solid rgba(52, 211, 153, 0.35);
+            color: #34d399;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .app-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: #ffffff;
+        }
+
+        .app-subtitle {
+            font-size: 0.825rem;
+            color: #cbd5e1;
+            margin-top: 0.15rem;
+        }
+
+        /* ==========================================================================
+           BARRA PEGAJOSA DE PROGRESO Y ACCIONES RÁPIDAS
+           ========================================================================== */
+        .sticky-bar {
+            position: sticky;
+            top: 0;
+            z-index: 30;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--border-soft);
+            padding: 0.75rem 0;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .sticky-inner {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+        }
+
+        .progress-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            flex: 1;
+            min-width: 220px;
+        }
+
+        .progress-label {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--text-main);
+            white-space: nowrap;
+        }
+
+        .progress-label span {
+            color: var(--primary);
+            font-size: 1rem;
+            font-weight: 800;
+        }
+
+        .progress-track {
+            flex: 1;
+            max-width: 260px;
+            height: 10px;
+            background-color: #e2e8f0;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background-color: var(--primary);
+            border-radius: 999px;
+            transition: width 0.25s ease;
+        }
+
+        .progress-pct {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            min-width: 36px;
+        }
+
+        .toolbar-actions {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* ==========================================================================
+           BOTONES REUTILIZABLES
+           ========================================================================== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.45rem;
+            font-family: inherit;
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 0.6rem 1rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all 0.18s ease;
+            text-decoration: none;
+            user-select: none;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-sm {
+            font-size: 0.78rem;
+            padding: 0.45rem 0.75rem;
+        }
+
+        .btn-lg {
+            font-size: 1rem;
+            padding: 0.9rem 1.65rem;
+            border-radius: var(--radius-md);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: #ffffff;
+            box-shadow: 0 2px 6px rgba(5, 150, 105, 0.28);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-dark {
+            background-color: var(--dark-btn);
+            color: #ffffff;
+        }
+
+        .btn-dark:hover {
+            background-color: var(--dark-btn-hover);
+        }
+
+        .btn-outline {
+            background-color: #ffffff;
+            color: var(--text-main);
+            border-color: var(--border-color);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--bg-subtle);
+            border-color: #94a3b8;
+        }
+
+        .btn-ghost-light {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #f8fafc;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-ghost-light:hover {
+            background-color: rgba(255, 255, 255, 0.18);
+        }
+
+        /* ==========================================================================
+           SECCIONES / TARJETAS
+           ========================================================================== */
+        main {
+            flex: 1;
+            padding: 1.5rem 0 2.5rem;
+        }
+
+        .stack {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-soft);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+
+        .card-body {
+            padding: 1.35rem 1.5rem;
+        }
+
+        .section-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            margin-bottom: 1.1rem;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .step-badge {
+            width: 26px;
+            height: 26px;
+            border-radius: 7px;
+            background-color: var(--bg-header);
+            color: #ffffff;
+            font-size: 0.78rem;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ==========================================================================
+           FORMULARIO DATOS DEL EVALUADO
+           ========================================================================== */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
+        }
+
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .field-label {
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            color: #334155;
+        }
+
+        .req {
+            color: var(--danger);
+        }
+
+        .opt {
+            color: var(--text-light);
+            font-weight: 500;
+            text-transform: none;
+        }
+
+        .text-input {
+            width: 100%;
+            padding: 0.65rem 0.85rem;
+            font-family: inherit;
+            font-size: 0.925rem;
+            font-weight: 600;
+            color: var(--text-main);
+            background-color: #ffffff;
+            border: 1.5px solid var(--border-color);
+            border-radius: var(--radius-md);
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .text-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.18);
+        }
+
+        .text-input.input-error {
+            border-color: var(--danger);
+            box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.18);
+        }
+
+        .text-input:disabled {
+            background-color: var(--bg-subtle);
+            color: var(--text-muted);
+            cursor: not-allowed;
+        }
+
+        /* ==========================================================================
+           PANEL DE RESULTADOS
+           ========================================================================== */
+        .results-card {
+            border: 2px solid var(--primary);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .results-banner {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #ffffff;
+            padding: 1.4rem 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .results-kicker {
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #34d399;
+        }
+
+        .results-name {
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-top: 0.15rem;
+        }
+
+        .results-meta {
+            font-size: 0.82rem;
+            color: #cbd5e1;
+            margin-top: 0.25rem;
+        }
+
+        .score-box {
+            background: rgba(255, 255, 255, 0.09);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 14px;
+            padding: 0.75rem 1.25rem;
+            text-align: right;
+        }
+
+        .score-label {
+            font-size: 0.75rem;
+            color: #cbd5e1;
+            font-weight: 600;
+        }
+
+        .score-value {
+            font-size: 2.1rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-top: 0.15rem;
+        }
+
+        .score-pass { color: #34d399; }
+        .score-fail { color: #fb7185; }
+
+        .status-pill-big {
+            display: inline-block;
+            margin-top: 0.35rem;
+            padding: 0.2rem 0.65rem;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .pill-pass {
+            background-color: rgba(16, 185, 129, 0.22);
+            color: #6ee7b7;
+            border: 1px solid rgba(52, 211, 153, 0.4);
+        }
+
+        .pill-fail {
+            background-color: rgba(244, 63, 94, 0.22);
+            color: #fda4af;
+            border: 1px solid rgba(251, 113, 133, 0.4);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 0.875rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .metric-box {
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-soft);
+            background-color: var(--bg-subtle);
+        }
+
+        .metric-box.ok {
+            background-color: var(--primary-soft);
+            border-color: var(--primary-border);
+            color: #065f46;
+        }
+
+        .metric-box.bad {
+            background-color: var(--danger-soft);
+            border-color: var(--danger-border);
+            color: #9f1239;
+        }
+
+        .metric-title {
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            opacity: 0.85;
+        }
+
+        .metric-num {
+            font-size: 1.45rem;
+            font-weight: 900;
+            margin-top: 0.2rem;
+        }
+
+        .share-panel {
+            background-color: var(--bg-subtle);
+            border: 1px solid var(--border-soft);
+            border-radius: var(--radius-md);
+            padding: 1.15rem;
+        }
+
+        .share-title {
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 0.25rem;
+        }
+
+        .share-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.9rem;
+        }
+
+        .share-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+            gap: 0.65rem;
+        }
+
+        /* ==========================================================================
+           TABLA DIRECTA DE 71 ARTÍCULOS
+           ========================================================================== */
+        .table-header-bar {
+            background-color: var(--bg-subtle);
+            padding: 1.1rem 1.5rem;
+            border-bottom: 1px solid var(--border-soft);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+        }
+
+        .helper-hint {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.2rem;
+        }
+
+        kbd {
+            display: inline-block;
+            padding: 0.1rem 0.4rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #334155;
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+        }
+
+        .order-pill {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #334155;
+            background-color: #e2e8f0;
+            padding: 0.3rem 0.65rem;
+            border-radius: 6px;
+        }
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        thead tr {
+            background-color: #1e293b;
+            color: #ffffff;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        th {
+            padding: 0.85rem 1rem;
+            font-weight: 800;
+        }
+
+        th.col-num { width: 56px; text-align: center; }
+        th.col-code { width: 220px; }
+        th.col-eval { width: 195px; }
+
+        tbody tr {
+            border-bottom: 1px solid var(--border-soft);
+            transition: background-color 0.15s ease;
+        }
+
+        tbody tr:hover {
+            background-color: #f8fafc;
+        }
+
+        td {
+            padding: 0.65rem 1rem;
+            vertical-align: middle;
+        }
+
+        td.cell-num {
+            text-align: center;
+            font-weight: 700;
+            color: var(--text-light);
+            font-size: 0.85rem;
+            user-select: none;
+        }
+
+        td.cell-article {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--text-main);
+        }
+
+        .code-input {
+            width: 100%;
+            padding: 0.55rem 0.8rem;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            color: var(--text-main);
+            background-color: #ffffff;
+            border: 1.5px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            transition: all 0.15s ease;
+        }
+
+        .code-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.18);
+        }
+
+        /* Estados tras calificar */
+        tr.row-correct {
+            background-color: var(--primary-soft) !important;
+        }
+
+        tr.row-correct .code-input {
+            border-color: var(--primary);
+            background-color: #d1fae5;
+            color: #064e3b;
+        }
+
+        tr.row-incorrect {
+            background-color: var(--danger-soft) !important;
+        }
+
+        tr.row-incorrect .code-input {
+            border-color: var(--danger);
+            background-color: #ffe4e6;
+            color: #881337;
+            text-decoration: line-through;
+        }
+
+        .badge-ok {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            background-color: #d1fae5;
+            color: #065f46;
+            border: 1px solid #6ee7b7;
+        }
+
+        .badge-err {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.2rem 0.55rem;
+            border-radius: 999px;
+            font-size: 0.73rem;
+            font-weight: 800;
+            background-color: #ffe4e6;
+            color: #9f1239;
+            border: 1px solid #fda4af;
+        }
+
+        .correct-hint {
+            display: block;
+            margin-top: 0.3rem;
+            font-size: 0.78rem;
+            color: #334155;
+        }
+
+        .correct-hint strong {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            background-color: #d1fae5;
+            color: #065f46;
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+            border: 1px solid #6ee7b7;
+        }
+
+        .table-footer {
+            background-color: var(--bg-subtle);
+            padding: 1.25rem 1.5rem;
+            border-top: 1px solid var(--border-soft);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .footer-note {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* ==========================================================================
+           MODAL DE CONFIRMACIÓN Y NOTIFICACIONES TOAST
+           ========================================================================== */
+        .hidden {
+            display: none !important;
+        }
+
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.6);
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal-box {
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            max-width: 440px;
+            width: 100%;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-soft);
+        }
+
+        .modal-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-text {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 1.35rem;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.65rem;
+        }
+
+        .toast-container {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 60;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            max-width: 360px;
+            width: calc(100% - 2rem);
+            pointer-events: none;
+        }
+
+        .toast {
+            background-color: #0f172a;
+            color: #ffffff;
+            padding: 0.8rem 1rem;
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: var(--shadow-lg);
+            border-left: 4px solid #34d399;
+            animation: slideIn 0.2s ease;
+        }
+
+        .toast.error {
+            border-left-color: #fb7185;
+            background-color: #881337;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .site-footer {
+            text-align: center;
+            font-size: 0.78rem;
+            color: var(--text-light);
+            padding: 1.25rem;
+        }
+
+        /* ==========================================================================
+           ADAPTACIÓN MÓVIL E IMPRESIÓN
+           ========================================================================== */
+        @media (max-width: 640px) {
+            th.col-code { width: 145px; }
+            td.cell-article { font-size: 0.88rem; }
+            .code-input { font-size: 0.92rem; padding: 0.5rem 0.6rem; }
+            .btn-lg { width: 100%; }
+        }
+
+        @media print {
+            body { background: #ffffff; }
+            .no-print { display: none !important; }
+            .card { box-shadow: none; border: 1px solid #94a3b8; }
+            .sticky-bar { position: static; }
+            tr { break-inside: avoid; page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Contenedor de mensajes flotantes -->
+    <div id="toast-container" class="toast-container no-print"></div>
+
+    <!-- Modal de confirmación -->
+    <div id="confirm-modal" class="modal-backdrop hidden no-print" role="dialog" aria-modal="true">
+        <div class="modal-box">
+            <h3 id="modal-title" class="modal-title">Confirmar</h3>
+            <p id="modal-text" class="modal-text">¿Deseas continuar?</p>
+            <div class="modal-actions">
+                <button id="modal-cancel" type="button" class="btn btn-outline">Cancelar</button>
+                <button id="modal-confirm" type="button" class="btn btn-primary">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Encabezado -->
+    <header class="app-header">
+        <div class="container header-inner">
+            <div class="brand-group">
+                <div class="brand-icon" aria-hidden="true">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 11l3 3L22 4"></path>
+                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="app-title">Examen de Códigos PLU / Artículos de Caja</h1>
+                    <p class="app-subtitle">Tesorería &bull; Evaluación directa de 71 artículos</p>
+                </div>
+            </div>
+
+            <!-- Botón para descargar el propio archivo index.html limpio -->
+            <div id="download-wrapper" class="no-print">
+                <button type="button" onclick="downloadSelfHtml()" class="btn btn-sm btn-ghost-light" title="Descarga una copia limpia de este archivo lista para subir a Netlify o Tiiny.host">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    Descargar index.html
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Barra pegajosa de progreso -->
+    <div class="sticky-bar no-print">
+        <div class="container sticky-inner">
+            <div class="progress-wrapper">
+                <div class="progress-label">
+                    Respondidos: <span id="answered-count">0</span> / 71
+                </div>
+                <div class="progress-track">
+                    <div id="progress-bar" class="progress-fill"></div>
+                </div>
+                <div id="progress-pct" class="progress-pct">0%</div>
+            </div>
+
+            <div class="toolbar-actions">
+                <button id="btn-shuffle" type="button" onclick="toggleOrder(true)" class="btn btn-sm btn-outline">
+                    Mezclar orden de preguntas
+                </button>
+                <button id="btn-original" type="button" onclick="toggleOrder(false)" class="btn btn-sm btn-dark hidden">
+                    Restaurar orden original
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenido principal -->
+    <main class="container">
+        <div class="stack">
+
+            <!-- PANEL DE RESULTADOS (Se muestra tras calificar) -->
+            <section id="results-panel" class="card results-card hidden">
+                <div class="results-banner">
+                    <div>
+                        <div class="results-kicker">Resultado Oficial de Evaluación</div>
+                        <h2 id="res-name" class="results-name">Nombre del Cajero</h2>
+                        <p id="res-meta" class="results-meta">Fecha y hora</p>
+                        <span id="res-status-badge" class="status-pill-big pill-pass">APROBADO</span>
+                    </div>
+                    <div class="score-box">
+                        <div class="score-label">Calificación Porcentual</div>
+                        <div id="res-percentage" class="score-value score-pass">0.00%</div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="metrics-grid">
+                        <div class="metric-box">
+                            <div class="metric-title">Total Evaluados</div>
+                            <div class="metric-num">71 Artículos</div>
+                        </div>
+                        <div class="metric-box ok">
+                            <div class="metric-title">Respuestas Correctas</div>
+                            <div id="res-correct" class="metric-num">0 / 71</div>
+                        </div>
+                        <div class="metric-box bad">
+                            <div class="metric-title">Errores / En Blanco</div>
+                            <div id="res-incorrect" class="metric-num">0 / 71</div>
+                        </div>
+                    </div>
+
+                    <div class="share-panel no-print">
+                        <h3 class="share-title">Enviar Resultados a Tesorería</h3>
+                        <p class="share-desc">El reporte incluye tu nombre, fecha/hora, calificación porcentual y el detalle exacto de los artículos fallados:</p>
+                        <div class="share-buttons">
+                            <button type="button" onclick="sendByWhatsApp()" class="btn btn-primary">
+                                Enviar por WhatsApp
+                            </button>
+                            <button type="button" onclick="sendByEmail()" class="btn btn-dark">
+                                Enviar por Correo
+                            </button>
+                            <button type="button" onclick="copyReport()" class="btn btn-outline">
+                                <span id="copy-label">Copiar Reporte</span>
+                            </button>
+                            <button type="button" onclick="window.print()" class="btn btn-outline">
+                                Imprimir / Guardar PDF
+                            </button>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 1rem; display: flex; justify-content: flex-end;" class="no-print">
+                        <button type="button" onclick="confirmReset()" class="btn btn-sm btn-outline">
+                            Reiniciar examen para otro cajero
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 1: DATOS DEL CAJERO -->
+            <section class="card">
+                <div class="card-body">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <span class="step-badge">1</span>
+                            Identificación del Evaluado
+                        </h2>
+                        <span style="font-size: 0.78rem; color: var(--text-muted); font-weight: 600;">* Ambos campos son obligatorios</span>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="field-group">
+                            <label for="cashier-name" class="field-label">
+                                Nombre completo del cajero <span class="req">*</span>
+                            </label>
+                            <input type="text" id="cashier-name" class="text-input" placeholder="Escribe tu nombre y apellido" autocomplete="name">
+                        </div>
+
+                        <div class="field-group">
+                            <label for="cashier-badge" class="field-label">
+                                Número de gafete <span class="req">*</span>
+                            </label>
+                            <input type="text" id="cashier-badge" class="text-input" placeholder="Ej. 10458" autocomplete="off">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 2: LISTADO DE LOS 71 ARTÍCULOS -->
+            <section class="card">
+                <div class="table-header-bar">
+                    <div>
+                        <h2 class="section-title">
+                            <span class="step-badge">2</span>
+                            Escribe el Código de cada Artículo (71 en total)
+                        </h2>
+                        <p class="helper-hint no-print">Presiona <kbd>Enter</kbd> después de escribir un código para saltar automáticamente al siguiente campo vacío.</p>
+                    </div>
+                    <span id="order-label" class="order-pill">Orden original (1 - 71)</span>
+                </div>
+
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="col-num">#</th>
+                                <th>Artículo</th>
+                                <th class="col-code">Código</th>
+                                <th id="th-eval" class="col-eval hidden">Resultado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="items-tbody">
+                            <!-- Generado automáticamente -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="submit-bar" class="table-footer no-print">
+                    <p class="footer-note">Nota mínima de aprobación: <strong>80.00%</strong> (57 aciertos de 71).</p>
+                    <button id="btn-finish" type="button" onclick="validateAndGrade()" class="btn btn-lg btn-primary">
+                        Calificar Examen
+                    </button>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="site-footer no-print">
+        Evaluación Interna de Códigos de Caja &bull; 71 Artículos Oficiales
+    </footer>
+
+    <script>
+        /* ==========================================================================
+           1. LISTADO EXACTO DE LOS 71 ARTÍCULOS Y CÓDIGOS
+           ========================================================================== */
+        const ITEMS_DATA = [
+            { id: 1, article: "UVA GLOBO", code: "4636" },
+            { id: 2, article: "CHILE DULCE REGULAR", code: "4687" },
+            { id: 3, article: "CHILE ROJO", code: "4688" },
+            { id: 4, article: "CHILE AMARILLO", code: "4689" },
+            { id: 5, article: "CHILE NARANJA", code: "3121" },
+            { id: 6, article: "AYOTE CALABAZA", code: "8564" },
+            { id: 7, article: "GUAYABA", code: "7805" },
+            { id: 8, article: "MELON", code: "7797" },
+            { id: 9, article: "CALALA", code: "4475" },
+            { id: 10, article: "MANZANA ROJA GRANDE", code: "7146" },
+            { id: 11, article: "MANZANA GRANNY GRANDE", code: "7148" },
+            { id: 12, article: "MANZANA GALA GRANDE", code: "7147" },
+            { id: 13, article: "BERENJENA", code: "8989" },
+            { id: 14, article: "ARROZ", code: "7031" },
+            { id: 15, article: "AZUCAR", code: "7033" },
+            { id: 16, article: "FRIJOL", code: "7035" },
+            { id: 17, article: "BROCOLI", code: "9578" },
+            { id: 18, article: "CHAYOTE NACIONAL", code: "4827" },
+            { id: 19, article: "CHAYOTE IMPORTADO", code: "7693" },
+            { id: 20, article: "LIMON SIN SEMILLA", code: "7436" },
+            { id: 21, article: "MANZANA ROJA PEQUEÑA", code: "7214" },
+            { id: 22, article: "MANZANA GRANNY PEQUEÑA", code: "7216" },
+            { id: 23, article: "MANZANA GALA PEQUEÑA", code: "7215" },
+            { id: 24, article: "LECHUGA AMERICANA", code: "4061" },
+            { id: 25, article: "TOMATE", code: "4664" },
+            { id: 26, article: "PEPINO", code: "4597" },
+            { id: 27, article: "APIO", code: "4583" },
+            { id: 28, article: "REMOLACHA", code: "4540" },
+            { id: 29, article: "ZANAHORIA", code: "4562" },
+            { id: 30, article: "LECHUGA FREASE", code: "4076" },
+            { id: 31, article: "LECHUGA ROMANA", code: "7809" },
+            { id: 32, article: "MOSTAZA CHINA", code: "4552" },
+            { id: 33, article: "AGUACATE", code: "4223" },
+            { id: 34, article: "ZUCHINI", code: "4067" },
+            { id: 35, article: "QUEQUISQUE", code: "4837" },
+            { id: 36, article: "MALANGA", code: "7802" },
+            { id: 37, article: "JENGIBRE", code: "4612" },
+            { id: 38, article: "CEBOLLA AMARILLA", code: "4093" },
+            { id: 39, article: "PAPA BLANCA", code: "4083" },
+            { id: 40, article: "AYOTE MANTEQUILLA", code: "4759" },
+            { id: 41, article: "CEBOLLINO", code: "7428" },
+            { id: 42, article: "AJO CHINO", code: "4610" },
+            { id: 43, article: "YUCA", code: "4849" },
+            { id: 44, article: "TOMATE MAYA", code: "7895" },
+            { id: 45, article: "PLATANO MADURO", code: "4237" },
+            { id: 46, article: "BANANO VERDE EXP", code: "7314" },
+            { id: 47, article: "PLATANO VERDE", code: "4235" },
+            { id: 48, article: "NARANJA AGRIA", code: "3172" },
+            { id: 49, article: "BANANO MADURO EXP", code: "7228" },
+            { id: 50, article: "BANANO MADURO NAC", code: "4233" },
+            { id: 51, article: "PAPAYA MARADOL", code: "3112" },
+            { id: 52, article: "PAPAYA CRIOLLO", code: "4482" },
+            { id: 53, article: "SANDIA PEQUEÑA", code: "7810" },
+            { id: 54, article: "PIÑA CRIOLLO", code: "3380" },
+            { id: 55, article: "COCO UNIDAD", code: "4261" },
+            { id: 56, article: "NARANJA DULCE", code: "7204" },
+            { id: 57, article: "NARANJA NAVEL", code: "4215" },
+            { id: 58, article: "SANDIA DE COLORES", code: "7772" },
+            { id: 59, article: "UVA VERDE", code: "7602" },
+            { id: 60, article: "COMIDA MASCOTA ADULTO", code: "2634" },
+            { id: 61, article: "GATO PESCADO", code: "1897" },
+            { id: 62, article: "GATO ROJITO", code: "9027" },
+            { id: 63, article: "COMIDA MASCOTA CACHORRO", code: "3285" },
+            { id: 64, article: "COMIDA PARA PERRO CORAZON", code: "1002" },
+            { id: 65, article: "HIELO PEQUEÑO", code: "743320010105" },
+            { id: 66, article: "HIELO GRANDE", code: "743320010106" },
+            { id: 67, article: "REPOLLO", code: "8223" },
+            { id: 68, article: "RABANO", code: "4089" },
+            { id: 69, article: "PERA", code: "8100" },
+            { id: 70, article: "CEBOLLA MORADA", code: "4667" },
+            { id: 71, article: "LIQUIDO FUENTE PURA", code: "743100182916" }
+        ];
+
+        /* ==========================================================================
+           2. ESTADO DE LA APLICACIÓN
+           ========================================================================== */
+        let displayedItems = [...ITEMS_DATA];
+        let answers = {};
+        let isShuffled = false;
+        let isGraded = false;
+        let evaluationReport = null;
+
+        /* ==========================================================================
+           3. INICIALIZACIÓN AL CARGAR LA PÁGINA
+           ========================================================================== */
+        window.onload = function () {
+            renderTable();
+            updateProgressBar();
+        };
+
+        /* ==========================================================================
+           4. RENDERIZADO DE LA TABLA Y NAVEGACIÓN CON ENTER
+           ========================================================================== */
+        function renderTable() {
+            const tbody = document.getElementById('items-tbody');
+            tbody.innerHTML = '';
+
+            displayedItems.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                tr.id = `row-${item.id}`;
+
+                const currentVal = answers[item.id] || '';
+
+                tr.innerHTML = `
+                    <td class="cell-num">${index + 1}</td>
+                    <td class="cell-article">${escapeHtml(item.article)}</td>
+                    <td>
+                        <input
+                            type="text"
+                            inputmode="numeric"
+                            autocomplete="off"
+                            spellcheck="false"
+                            data-id="${item.id}"
+                            data-pos="${index}"
+                            value="${escapeHtml(currentVal)}"
+                            placeholder="Código..."
+                            class="code-input"
+                        />
+                    </td>
+                    <td id="eval-${item.id}" class="hidden"></td>
+                `;
+
+                tbody.appendChild(tr);
+            });
+
+            const inputs = tbody.querySelectorAll('.code-input');
+            inputs.forEach((input) => {
+                input.addEventListener('input', function (e) {
+                    const id = parseInt(e.target.dataset.id, 10);
+                    const sanitized = e.target.value.replace(/\s+/g, '');
+                    if (e.target.value !== sanitized) {
+                        e.target.value = sanitized;
+                    }
+                    answers[id] = sanitized;
+                    updateProgressBar();
+                });
+
+                // Al presionar Enter, saltar al siguiente campo vacío (o al siguiente en lista si todos tienen algo)
+                input.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        const currentPos = parseInt(e.target.dataset.pos, 10);
+                        const allInputs = Array.from(document.querySelectorAll('.code-input'));
+
+                        // Buscar el siguiente campo vacío hacia abajo
+                        let target = allInputs.slice(currentPos + 1).find(inp => inp.value.trim() === '');
+                        // Si no hay vacíos abajo, buscar vacíos desde el inicio
+                        if (!target) {
+                            target = allInputs.slice(0, currentPos).find(inp => inp.value.trim() === '');
+                        }
+                        // Si todos están llenos, pasar simplemente al siguiente campo o al botón finalizar
+                        if (!target && currentPos + 1 < allInputs.length) {
+                            target = allInputs[currentPos + 1];
+                        }
+
+                        if (target) {
+                            target.focus();
+                            target.select();
+                        } else {
+                            document.getElementById('btn-finish').focus();
+                        }
+                    }
+                });
+            });
+        }
+
+        function updateProgressBar() {
+            let count = 0;
+            for (let i = 0; i < ITEMS_DATA.length; i++) {
+                const val = answers[ITEMS_DATA[i].id];
+                if (val && val.trim().length > 0) {
+                    count++;
+                }
+            }
+            const pct = Math.round((count / ITEMS_DATA.length) * 100);
+            document.getElementById('answered-count').textContent = count;
+            document.getElementById('progress-bar').style.width = `${pct}%`;
+            document.getElementById('progress-pct').textContent = `${pct}%`;
+        }
+
+        /* ==========================================================================
+           5. MEZCLAR O RESTAURAR ORDEN
+           ========================================================================== */
+        function toggleOrder(shuffle) {
+            if (isGraded) return;
+
+            if (shuffle) {
+                const copy = [...ITEMS_DATA];
+                for (let i = copy.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [copy[i], copy[j]] = [copy[j], copy[i]];
+                }
+                displayedItems = copy;
+                isShuffled = true;
+                document.getElementById('btn-shuffle').classList.add('hidden');
+                document.getElementById('btn-original').classList.remove('hidden');
+                document.getElementById('order-label').textContent = 'Orden mezclado aleatoriamente';
+                showToast('Orden de los 71 artículos mezclado.');
+            } else {
+                displayedItems = [...ITEMS_DATA];
+                isShuffled = false;
+                document.getElementById('btn-original').classList.add('hidden');
+                document.getElementById('btn-shuffle').classList.remove('hidden');
+                document.getElementById('order-label').textContent = 'Orden original (1 - 71)';
+                showToast('Orden original restaurado.');
+            }
+
+            renderTable();
+        }
+
+        /* ==========================================================================
+           6. VALIDACIÓN Y CALIFICACIÓN DEL EXAMEN
+           ========================================================================== */
+        function validateAndGrade() {
+            if (isGraded) return;
+
+            const nameEl = document.getElementById('cashier-name');
+            const badgeEl = document.getElementById('cashier-badge');
+            const cashierName = nameEl.value.trim();
+            const cashierBadge = badgeEl.value.trim();
+
+            if (!cashierName) {
+                nameEl.classList.add('input-error');
+                nameEl.focus();
+                nameEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                showToast('Por favor escribe tu nombre completo antes de calificar.', true);
+                nameEl.addEventListener('input', function clearErr() {
+                    nameEl.classList.remove('input-error');
+                    nameEl.removeEventListener('input', clearErr);
+                });
+                return;
+            }
+
+            if (!cashierBadge) {
+                badgeEl.classList.add('input-error');
+                badgeEl.focus();
+                badgeEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                showToast('Por favor ingresa tu número de gafete antes de calificar.', true);
+                badgeEl.addEventListener('input', function clearErr() {
+                    badgeEl.classList.remove('input-error');
+                    badgeEl.removeEventListener('input', clearErr);
+                });
+                return;
+            }
+
+            let emptyCount = 0;
+            ITEMS_DATA.forEach(item => {
+                if (!answers[item.id] || answers[item.id].trim() === '') {
+                    emptyCount++;
+                }
+            });
+
+            if (emptyCount > 0) {
+                openModal(
+                    'Preguntas sin responder',
+                    `Tienes ${emptyCount} artículo(s) sin responder de los 71 totales. Los campos vacíos se contarán como incorrectos. ¿Deseas finalizar y calificar ahora?`,
+                    'Sí, calificar ahora',
+                    gradeExam
+                );
+            } else {
+                openModal(
+                    'Calificar Examen',
+                    'Has completado los 71 artículos. Una vez calificado no podrás cambiar tus respuestas. ¿Deseas ver tu nota?',
+                    'Calificar Examen',
+                    gradeExam
+                );
+            }
+        }
+
+        function gradeExam() {
+            isGraded = true;
+
+            const cashierName = document.getElementById('cashier-name').value.trim();
+            const cashierBadge = document.getElementById('cashier-badge').value.trim();
+            const now = new Date();
+            const timestamp = now.toLocaleDateString('es-NI', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            }) + ' ' + now.toLocaleTimeString('es-NI', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            let correct = 0;
+            const failedItems = [];
+
+            document.getElementById('th-eval').classList.remove('hidden');
+
+            displayedItems.forEach(item => {
+                const given = (answers[item.id] || '').trim();
+                const isOk = given === item.code;
+
+                const row = document.getElementById(`row-${item.id}`);
+                const input = row.querySelector('input');
+                const evalCell = document.getElementById(`eval-${item.id}`);
+
+                input.disabled = true;
+                evalCell.classList.remove('hidden');
+
+                if (isOk) {
+                    correct++;
+                    row.classList.add('row-correct');
+                    evalCell.innerHTML = `<span class="badge-ok">&#10003; Correcto</span>`;
+                } else {
+                    failedItems.push({
+                        id: item.id,
+                        article: item.article,
+                        given: given || '(En blanco)',
+                        expected: item.code
+                    });
+                    row.classList.add('row-incorrect');
+                    evalCell.innerHTML = `
+                        <span class="badge-err">&#10007; Incorrecto</span>
+                        <span class="correct-hint">Correcto: <strong>${item.code}</strong></span>
+                    `;
+                }
+            });
+
+            failedItems.sort((a, b) => a.id - b.id);
+
+            const total = ITEMS_DATA.length;
+            const incorrect = total - correct;
+            const pctNumber = (correct / total) * 100;
+            const pctFormatted = pctNumber.toFixed(2);
+            const passed = pctNumber >= 80;
+
+            evaluationReport = {
+                cashierName,
+                cashierBadge,
+                timestamp,
+                correct,
+                incorrect,
+                total,
+                pctFormatted,
+                passed,
+                failedItems
+            };
+
+            // Llenar tarjeta de resultados
+            document.getElementById('res-name').textContent = cashierName;
+            document.getElementById('res-meta').textContent = `N.° de Gafete: ${cashierBadge}  |  Fecha y hora: ${timestamp}`;
+
+            const pctEl = document.getElementById('res-percentage');
+            pctEl.textContent = `${pctFormatted}%`;
+            pctEl.className = `score-value ${passed ? 'score-pass' : 'score-fail'}`;
+
+            const statusBadge = document.getElementById('res-status-badge');
+            statusBadge.textContent = passed ? 'APROBADO (>= 80%)' : 'REPROBADO (< 80%)';
+            statusBadge.className = `status-pill-big ${passed ? 'pill-pass' : 'pill-fail'}`;
+
+            document.getElementById('res-correct').textContent = `${correct} / ${total}`;
+            document.getElementById('res-incorrect').textContent = `${incorrect} / ${total}`;
+
+            // Bloquear controles de edición
+            document.getElementById('cashier-name').disabled = true;
+            document.getElementById('cashier-badge').disabled = true;
+            document.getElementById('btn-shuffle').classList.add('hidden');
+            document.getElementById('btn-original').classList.add('hidden');
+            document.getElementById('submit-bar').classList.add('hidden');
+
+            const resultsPanel = document.getElementById('results-panel');
+            resultsPanel.classList.remove('hidden');
+            resultsPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            showToast(`Calificación final: ${pctFormatted}% (${correct}/71 aciertos).`);
+        }
+
+        /* ==========================================================================
+           7. GENERACIÓN Y ENVÍO DE REPORTE A TESORERÍA
+           ========================================================================== */
+        function buildReportText(forWhatsApp = false) {
+            if (!evaluationReport) return '';
+            const r = evaluationReport;
+            const b = forWhatsApp ? '*' : '';
+
+            const lines = [
+                `${b}EXAMEN DE CÓDIGOS PLU - RESULTADOS${b}`,
+                `----------------------------------------`,
+                `${b}Cajero:${b} ${r.cashierName}`,
+                `${b}N.° de Gafete:${b} ${r.cashierBadge}`,
+                `${b}Fecha y hora:${b} ${r.timestamp}`,
+                `${b}Calificación:${b} ${r.pctFormatted}% (${r.passed ? 'APROBADO' : 'REPROBADO'})`,
+                `${b}Aciertos:${b} ${r.correct} de ${r.total}`,
+                `${b}Errores:${b} ${r.incorrect} de ${r.total}`,
+                `----------------------------------------`
+            ];
+
+            if (r.failedItems.length === 0) {
+                lines.push(`Sin errores (71 de 71 correctos).`);
+            } else {
+                lines.push(`${b}CÓDIGOS FALLADOS (${r.failedItems.length}):${b}`);
+                r.failedItems.forEach((item, idx) => {
+                    lines.push(`${idx + 1}. ${item.article}: Escribió [${item.given}] -> Correcto: ${item.expected}`);
+                });
+            }
+
+            return lines.join('\n');
+        }
+
+        function sendByWhatsApp() {
+            if (!evaluationReport) return;
+            const text = buildReportText(true);
+            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer');
+        }
+
+        function sendByEmail() {
+            if (!evaluationReport) return;
+            const r = evaluationReport;
+            const subject = encodeURIComponent(`Examen Códigos PLU - ${r.cashierName} (Gafete ${r.cashierBadge}) - ${r.pctFormatted}%`);
+            const body = encodeURIComponent(buildReportText(false));
+            window.location.href = `mailto:?subject=${subject}&body=${body}`;
+            showToast('Abriendo correo electrónico con el reporte...');
+        }
+
+        function copyReport() {
+            if (!evaluationReport) return;
+            const text = buildReportText(false);
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.left = '-9999px';
+            document.body.appendChild(textarea);
+            textarea.select();
+
+            try {
+                if (document.execCommand('copy')) {
+                    const label = document.getElementById('copy-label');
+                    label.textContent = '¡Reporte Copiado!';
+                    showToast('Reporte copiado al portapapeles.');
+                    setTimeout(() => { label.textContent = 'Copiar Reporte'; }, 2500);
+                } else {
+                    showToast('No se pudo copiar automáticamente.', true);
+                }
+            } catch (_) {
+                showToast('Error al copiar al portapapeles.', true);
+            } finally {
+                document.body.removeChild(textarea);
+            }
+        }
+
+        /* ==========================================================================
+           8. DESCARGAR PROPIO ARCHIVO INDEX.HTML LIMPIO (BLOB)
+           ========================================================================== */
+        function downloadSelfHtml() {
+            try {
+                // Clonar el documento actual y restaurar su estado limpio inicial
+                const docClone = document.documentElement.cloneNode(true);
+
+                // Eliminar el botón de descarga del archivo final que verán los cajeros
+                const downloadWrapper = docClone.querySelector('#download-wrapper');
+                if (downloadWrapper) downloadWrapper.remove();
+
+                // Limpiar posibles estados dinámicos antes de serializar
+                const modal = docClone.querySelector('#confirm-modal');
+                if (modal) modal.classList.add('hidden');
+
+                const toastContainer = docClone.querySelector('#toast-container');
+                if (toastContainer) toastContainer.innerHTML = '';
+
+                const resultsPanel = docClone.querySelector('#results-panel');
+                if (resultsPanel) resultsPanel.classList.add('hidden');
+
+                const thEval = docClone.querySelector('#th-eval');
+                if (thEval) thEval.classList.add('hidden');
+
+                const submitBar = docClone.querySelector('#submit-bar');
+                if (submitBar) submitBar.classList.remove('hidden');
+
+                const tbody = docClone.querySelector('#items-tbody');
+                if (tbody) tbody.innerHTML = '';
+
+                const nameInput = docClone.querySelector('#cashier-name');
+                if (nameInput) {
+                    nameInput.value = '';
+                    nameInput.removeAttribute('disabled');
+                    nameInput.classList.remove('input-error');
+                }
+
+                const badgeInput = docClone.querySelector('#cashier-badge');
+                if (badgeInput) {
+                    badgeInput.value = '';
+                    badgeInput.removeAttribute('disabled');
+                    badgeInput.classList.remove('input-error');
+                }
+
+                const fullHtml = '<!DOCTYPE html>\n' + docClone.outerHTML;
+                const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'index.html';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+                showToast('Archivo index.html descargado. Ya puedes subirlo directamente.');
+            } catch (err) {
+                showToast('No se pudo descargar automáticamente desde este navegador.', true);
+            }
+        }
+
+        /* ==========================================================================
+           9. REINICIAR EXAMEN Y UTILIDADES DE UI
+           ========================================================================== */
+        function confirmReset() {
+            openModal(
+                'Reiniciar Examen',
+                'Se borrarán todas las respuestas y datos actuales para que otro cajero pueda realizar la prueba. ¿Continuar?',
+                'Sí, reiniciar',
+                () => {
+                    isGraded = false;
+                    answers = {};
+                    evaluationReport = null;
+
+                    const nameEl = document.getElementById('cashier-name');
+                    const badgeEl = document.getElementById('cashier-badge');
+                    nameEl.value = '';
+                    nameEl.disabled = false;
+                    badgeEl.value = '';
+                    badgeEl.disabled = false;
+
+                    document.getElementById('results-panel').classList.add('hidden');
+                    document.getElementById('th-eval').classList.add('hidden');
+                    document.getElementById('submit-bar').classList.remove('hidden');
+
+                    if (isShuffled) {
+                        document.getElementById('btn-original').classList.remove('hidden');
+                    } else {
+                        document.getElementById('btn-shuffle').classList.remove('hidden');
+                    }
+
+                    renderTable();
+                    updateProgressBar();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    showToast('Examen listo para el siguiente cajero.');
+                }
+            );
+        }
+
+        function showToast(msg, isError = false) {
+            const container = document.getElementById('toast-container');
+            const div = document.createElement('div');
+            div.className = `toast ${isError ? 'error' : ''}`;
+            div.textContent = msg;
+            container.appendChild(div);
+            setTimeout(() => {
+                div.style.opacity = '0';
+                div.style.transition = 'opacity 0.25s ease';
+                setTimeout(() => div.remove(), 260);
+            }, 3400);
+        }
+
+        function openModal(title, text, confirmLabel, onConfirm) {
+            const modal = document.getElementById('confirm-modal');
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-text').textContent = text;
+            const btnConfirm = document.getElementById('modal-confirm');
+            const btnCancel = document.getElementById('modal-cancel');
+            btnConfirm.textContent = confirmLabel;
+
+            modal.classList.remove('hidden');
+
+            const close = () => {
+                modal.classList.add('hidden');
+                btnConfirm.onclick = null;
+                btnCancel.onclick = null;
+            };
+
+            btnCancel.onclick = close;
+            btnConfirm.onclick = () => {
+                close();
+                if (typeof onConfirm === 'function') onConfirm();
+            };
+        }
+
+        function escapeHtml(text) {
+            if (text === null || text === undefined) return '';
+            return String(text)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+    </script>
+</body>
+</html>
