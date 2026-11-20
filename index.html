@@ -826,16 +826,269 @@
             .btn-lg { width: 100%; }
         }
 
+        /* ==========================================================================
+           HOJA DE IMPRESIÓN COMPACTA (1 SOLA HOJA CARTA CON LOS 71 ARTÍCULOS EN 3 COLUMNAS)
+           ========================================================================== */
+        .print-sheet {
+            display: none;
+        }
+
+        @page {
+            size: letter portrait;
+            margin: 0.25in;
+        }
+
         @media print {
-            body { background: #ffffff; }
-            .no-print { display: none !important; }
-            .card { box-shadow: none; border: 1px solid #94a3b8; }
-            .sticky-bar { position: static; }
-            tr { break-inside: avoid; page-break-inside: avoid; }
+            html, body {
+                background: #ffffff !important;
+                color: #0f172a !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 100% !important;
+                height: auto !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            /* Ocultar interfaz interactiva de pantalla y mostrar el formato de 1 sola hoja */
+            .screen-only,
+            .no-print {
+                display: none !important;
+            }
+
+            .print-sheet {
+                display: block !important;
+                width: 100% !important;
+                font-size: 7.4pt !important;
+                line-height: 1.15 !important;
+            }
+
+            .ps-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                border-bottom: 1.5pt solid #0f172a;
+                padding-bottom: 5pt;
+                margin-bottom: 6pt;
+            }
+
+            .ps-brand {
+                display: flex;
+                align-items: center;
+                gap: 6pt;
+            }
+
+            .ps-icon {
+                width: 22pt;
+                height: 22pt;
+                border-radius: 5pt;
+                background: #ecfdf5;
+                border: 1pt solid #059669;
+                color: #059669;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 900;
+                font-size: 11pt;
+            }
+
+            .ps-title {
+                font-size: 11pt;
+                font-weight: 800;
+                color: #0f172a;
+            }
+
+            .ps-subtitle {
+                font-size: 7.5pt;
+                color: #475569;
+            }
+
+            .ps-summary-card {
+                border: 1pt solid #cbd5e1;
+                border-radius: 7pt;
+                padding: 6pt 8pt;
+                margin-bottom: 6pt;
+                background: #f8fafc;
+            }
+
+            .ps-summary-top {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 5pt;
+            }
+
+            .ps-kicker {
+                font-size: 6.5pt;
+                font-weight: 800;
+                color: #059669;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+            }
+
+            .ps-name {
+                font-size: 11pt;
+                font-weight: 800;
+                color: #0f172a;
+            }
+
+            .ps-meta {
+                font-size: 7.5pt;
+                color: #475569;
+            }
+
+            .ps-badge {
+                display: inline-block;
+                margin-left: 6pt;
+                padding: 1pt 5pt;
+                border-radius: 99pt;
+                font-size: 6.5pt;
+                font-weight: 800;
+            }
+
+            .ps-badge.pass {
+                background: #d1fae5;
+                color: #065f46;
+                border: 0.75pt solid #6ee7b7;
+            }
+
+            .ps-badge.fail {
+                background: #ffe4e6;
+                color: #9f1239;
+                border: 0.75pt solid #fda4af;
+            }
+
+            .ps-score-wrap {
+                text-align: right;
+            }
+
+            .ps-score-lbl {
+                font-size: 6.5pt;
+                color: #475569;
+                font-weight: 700;
+            }
+
+            .ps-score-val {
+                font-size: 16pt;
+                font-weight: 900;
+                line-height: 1.05;
+            }
+
+            .ps-score-val.pass { color: #059669; }
+            .ps-score-val.fail { color: #e11d48; }
+
+            .ps-kpis {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 6pt;
+            }
+
+            .ps-kpi {
+                border: 0.75pt solid #cbd5e1;
+                border-radius: 5pt;
+                padding: 3.5pt 6pt;
+                background: #ffffff;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .ps-kpi.ok {
+                background: #ecfdf5;
+                border-color: #6ee7b7;
+                color: #065f46;
+            }
+
+            .ps-kpi.bad {
+                background: #fff1f2;
+                border-color: #fda4af;
+                color: #9f1239;
+            }
+
+            .ps-kpi-t {
+                font-size: 6.2pt;
+                font-weight: 800;
+                text-transform: uppercase;
+            }
+
+            .ps-kpi-v {
+                font-size: 8.5pt;
+                font-weight: 900;
+            }
+
+            /* Rejilla de 3 columnas (24 + 24 + 23 = 71 ítems en 1 hoja) */
+            .ps-columns {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 5pt;
+                align-items: start;
+            }
+
+            .ps-mini-table {
+                width: 100%;
+                border-collapse: collapse;
+                table-layout: fixed;
+            }
+
+            .ps-mini-table th {
+                background: #1e293b;
+                color: #ffffff;
+                font-size: 6pt;
+                font-weight: 800;
+                padding: 2.2pt 2.5pt;
+                text-transform: uppercase;
+                border: 0.5pt solid #1e293b;
+            }
+
+            .ps-mini-table td {
+                padding: 1.65pt 2.5pt;
+                border: 0.5pt solid #cbd5e1;
+                font-size: 6.4pt;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .ps-mini-table tr.ok {
+                background: #f0fdf4;
+            }
+
+            .ps-mini-table tr.bad {
+                background: #fff1f2;
+            }
+
+            .ps-col-n { width: 15pt; text-align: center; color: #64748b; font-weight: 700; }
+            .ps-col-a { width: auto; font-weight: 700; color: #0f172a; }
+            .ps-col-r { width: 44pt; font-family: monospace; font-weight: 700; text-align: center; }
+            .ps-col-s { width: 44pt; font-family: monospace; font-weight: 800; text-align: center; }
+
+            .ps-st-ok { color: #059669; }
+            .ps-st-bad { color: #e11d48; }
+
+            .ps-signatures {
+                margin-top: 8pt;
+                display: flex;
+                justify-content: space-between;
+                gap: 24pt;
+                padding: 0 12pt;
+            }
+
+            .ps-sig-box {
+                flex: 1;
+                border-top: 0.75pt solid #475569;
+                padding-top: 2.5pt;
+                text-align: center;
+                font-size: 6.8pt;
+                color: #475569;
+                font-weight: 600;
+            }
         }
     </style>
 </head>
 <body>
+
+    <!-- FORMATO EXCLUSIVO PARA IMPRESIÓN EN 1 SOLA HOJA CARTA (71 ARTÍCULOS EN 3 COLUMNAS) -->
+    <div id="print-sheet" class="print-sheet" aria-hidden="true"></div>
 
     <!-- Contenedor de mensajes flotantes -->
     <div id="toast-container" class="toast-container no-print"></div>
@@ -942,20 +1195,20 @@
                     </div>
 
                     <div class="share-panel no-print">
-                        <h3 class="share-title">Enviar Resultados a Tesorería</h3>
-                        <p class="share-desc">El reporte incluye tu nombre, fecha/hora, calificación porcentual y el detalle exacto de los artículos fallados:</p>
+                        <h3 class="share-title">Enviar o Imprimir Resultados para Tesorería</h3>
+                        <p class="share-desc">Elige cómo deseas enviar tu resultado a la tesorera o guardarlo en 1 sola hoja:</p>
                         <div class="share-buttons">
-                            <button type="button" onclick="sendByWhatsApp()" class="btn btn-primary">
-                                Enviar por WhatsApp
+                            <button type="button" onclick="window.print()" class="btn btn-primary">
+                                Guardar PDF / Imprimir (1 Hoja)
                             </button>
-                            <button type="button" onclick="sendByEmail()" class="btn btn-dark">
+                            <button type="button" onclick="downloadOfficialReceipt()" class="btn btn-dark">
+                                Descargar Comprobante (.html)
+                            </button>
+                            <button type="button" onclick="sendByWhatsApp()" class="btn btn-outline">
+                                Enviar Resumen por WhatsApp
+                            </button>
+                            <button type="button" onclick="sendByEmail()" class="btn btn-outline">
                                 Enviar por Correo
-                            </button>
-                            <button type="button" onclick="copyReport()" class="btn btn-outline">
-                                <span id="copy-label">Copiar Reporte</span>
-                            </button>
-                            <button type="button" onclick="window.print()" class="btn btn-outline">
-                                Imprimir / Guardar PDF
                             </button>
                         </div>
                     </div>
@@ -1407,11 +1660,227 @@
             document.getElementById('btn-original').classList.add('hidden');
             document.getElementById('submit-bar').classList.add('hidden');
 
+            // Construir la hoja compacta de impresión (1 sola página Carta con los 71 artículos)
+            buildOnePagePrintSheet();
+
             const resultsPanel = document.getElementById('results-panel');
             resultsPanel.classList.remove('hidden');
             resultsPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-            showToast(`Calificación final: ${pctFormatted}% (${correct}/71 aciertos).`);
+            showToast(`Calificación final: ${pctFormatted}% (${correct}/71 aciertos). Listo para imprimir en 1 hoja.`);
+        }
+
+        /* ==========================================================================
+           6B. CONSTRUCCIÓN DE LA HOJA ÚNICA DE IMPRESIÓN (3 COLUMNAS = 1 PÁGINA CARTA)
+           ========================================================================== */
+        function buildOnePagePrintSheet() {
+            if (!evaluationReport) return;
+            const r = evaluationReport;
+
+            // Dividir siempre los 71 artículos en orden original en 3 columnas (24, 24 y 23 filas)
+            const orderedAll = ITEMS_DATA.map(item => {
+                const given = (answers[item.id] || '').trim();
+                const isOk = given === item.code;
+                return {
+                    id: item.id,
+                    article: item.article,
+                    given: given || '—',
+                    expected: item.code,
+                    isOk
+                };
+            });
+
+            const col1 = orderedAll.slice(0, 24);
+            const col2 = orderedAll.slice(24, 48);
+            const col3 = orderedAll.slice(48, 71);
+
+            const renderMiniTable = (rows) => {
+                const bodyHtml = rows.map(row => `
+                    <tr class="${row.isOk ? 'ok' : 'bad'}">
+                        <td class="ps-col-n">${row.id}</td>
+                        <td class="ps-col-a" title="${escapeHtml(row.article)}">${escapeHtml(row.article)}</td>
+                        <td class="ps-col-r">${escapeHtml(row.given)}</td>
+                        <td class="ps-col-s ${row.isOk ? 'ps-st-ok' : 'ps-st-bad'}">
+                            ${row.isOk ? '&#10003; OK' : `&#10007; ${row.expected}`}
+                        </td>
+                    </tr>
+                `).join('');
+
+                return `
+                    <table class="ps-mini-table">
+                        <thead>
+                            <tr>
+                                <th class="ps-col-n">#</th>
+                                <th class="ps-col-a">Artículo</th>
+                                <th class="ps-col-r">Resp.</th>
+                                <th class="ps-col-s">Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>${bodyHtml}</tbody>
+                    </table>
+                `;
+            };
+
+            const sheetEl = document.getElementById('print-sheet');
+            sheetEl.innerHTML = `
+                <div class="ps-header">
+                    <div class="ps-brand">
+                        <div class="ps-icon">&#10003;</div>
+                        <div>
+                            <div class="ps-title">Examen de Códigos PLU / Artículos de Caja</div>
+                            <div class="ps-subtitle">Tesorería &bull; Evaluación directa de 71 artículos</div>
+                        </div>
+                    </div>
+                    <div style="text-align: right; font-size: 7pt; color: #475569;">
+                        <strong>Comprobante Oficial</strong><br>
+                        Nota mínima: 80.00%
+                    </div>
+                </div>
+
+                <div class="ps-summary-card">
+                    <div class="ps-summary-top">
+                        <div>
+                            <div class="ps-kicker">Resultado Oficial de Evaluación</div>
+                            <div class="ps-name">
+                                ${escapeHtml(r.cashierName)}
+                                <span class="ps-badge ${r.passed ? 'pass' : 'fail'}">
+                                    ${r.passed ? 'APROBADO' : 'REPROBADO'}
+                                </span>
+                            </div>
+                            <div class="ps-meta">
+                                <strong>N.° de Gafete:</strong> ${escapeHtml(r.cashierBadge)} &nbsp;|&nbsp;
+                                <strong>Fecha y hora:</strong> ${escapeHtml(r.timestamp)}
+                            </div>
+                        </div>
+                        <div class="ps-score-wrap">
+                            <div class="ps-score-lbl">Calificación Porcentual</div>
+                            <div class="ps-score-val ${r.passed ? 'pass' : 'fail'}">${r.pctFormatted}%</div>
+                        </div>
+                    </div>
+
+                    <div class="ps-kpis">
+                        <div class="ps-kpi">
+                            <span class="ps-kpi-t">Total Evaluados</span>
+                            <span class="ps-kpi-v">71 Artículos</span>
+                        </div>
+                        <div class="ps-kpi ok">
+                            <span class="ps-kpi-t">Respuestas Correctas</span>
+                            <span class="ps-kpi-v">${r.correct} / 71</span>
+                        </div>
+                        <div class="ps-kpi bad">
+                            <span class="ps-kpi-t">Errores / En Blanco</span>
+                            <span class="ps-kpi-v">${r.incorrect} / 71</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ps-columns">
+                    ${renderMiniTable(col1)}
+                    ${renderMiniTable(col2)}
+                    ${renderMiniTable(col3)}
+                </div>
+
+                <div class="ps-signatures">
+                    <div class="ps-sig-box">Firma del Cajero (${escapeHtml(r.cashierName)})</div>
+                    <div class="ps-sig-box">Vo.Bo. Tesorería / Supervisión</div>
+                </div>
+            `;
+        }
+
+        /* ==========================================================================
+           6C. DESCARGAR COMPROBANTE OFICIAL YA CALIFICADO (.HTML) PARA ENVIAR A TESORERÍA
+           ========================================================================== */
+        function downloadOfficialReceipt() {
+            if (!evaluationReport) return;
+            const r = evaluationReport;
+
+            try {
+                const docClone = document.documentElement.cloneNode(true);
+                const downloadWrapper = docClone.querySelector('#download-wrapper');
+                if (downloadWrapper) downloadWrapper.remove();
+
+                // Dejar oculta la interfaz de edición y visible solo la hoja oficial lista para imprimir
+                const bodyClone = docClone.querySelector('body');
+                const printSheetHtml = document.getElementById('print-sheet').innerHTML;
+
+                bodyClone.innerHTML = `
+                    <div class="no-print" style="background:#0f172a;color:#fff;padding:12px 16px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;font-family:system-ui,sans-serif;">
+                        <div>
+                            <strong style="font-size:14px;">Comprobante Oficial: ${escapeHtml(r.cashierName)} (Gafete ${escapeHtml(r.cashierBadge)})</strong>
+                            <div style="font-size:12px;color:#cbd5e1;">Calificación: ${r.pctFormatted}% (${r.correct}/71 aciertos) &bull; Listo para imprimir en 1 sola hoja Carta</div>
+                        </div>
+                        <button onclick="window.print()" style="background:#059669;color:#fff;border:none;padding:9px 16px;border-radius:8px;font-weight:700;cursor:pointer;font-size:13px;">
+                            Imprimir / Guardar PDF (1 Hoja)
+                        </button>
+                    </div>
+                    <div style="max-width:8.2in;margin:14px auto;background:#fff;padding:16px;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,0.08);" class="receipt-preview">
+                        ${printSheetHtml}
+                    </div>
+                    <div id="print-sheet" class="print-sheet">${printSheetHtml}</div>
+                `;
+
+                // Estilos para que también se vea nítido en pantalla antes de darle imprimir
+                const extraStyle = docClone.ownerDocument.createElement('style');
+                extraStyle.textContent = `
+                    @media screen {
+                        body { background: #e2e8f0; margin: 0; font-family: system-ui, sans-serif; }
+                        .receipt-preview .ps-header { display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #0f172a; padding-bottom:8px; margin-bottom:10px; }
+                        .receipt-preview .ps-brand { display:flex; align-items:center; gap:8px; }
+                        .receipt-preview .ps-icon { width:28px; height:28px; border-radius:6px; background:#ecfdf5; border:1px solid #059669; color:#059669; display:flex; align-items:center; justify-content:center; font-weight:900; }
+                        .receipt-preview .ps-title { font-size:15px; font-weight:800; }
+                        .receipt-preview .ps-subtitle { font-size:11px; color:#475569; }
+                        .receipt-preview .ps-summary-card { border:1px solid #cbd5e1; border-radius:8px; padding:10px 12px; margin-bottom:10px; background:#f8fafc; }
+                        .receipt-preview .ps-summary-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+                        .receipt-preview .ps-kicker { font-size:10px; font-weight:800; color:#059669; text-transform:uppercase; }
+                        .receipt-preview .ps-name { font-size:16px; font-weight:800; }
+                        .receipt-preview .ps-meta { font-size:11px; color:#475569; }
+                        .receipt-preview .ps-badge { display:inline-block; margin-left:6px; padding:2px 7px; border-radius:99px; font-size:10px; font-weight:800; }
+                        .receipt-preview .ps-badge.pass { background:#d1fae5; color:#065f46; }
+                        .receipt-preview .ps-badge.fail { background:#ffe4e6; color:#9f1239; }
+                        .receipt-preview .ps-score-val { font-size:22px; font-weight:900; }
+                        .receipt-preview .ps-score-val.pass { color:#059669; }
+                        .receipt-preview .ps-score-val.fail { color:#e11d48; }
+                        .receipt-preview .ps-kpis { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+                        .receipt-preview .ps-kpi { border:1px solid #cbd5e1; border-radius:6px; padding:6px 8px; background:#fff; display:flex; justify-content:space-between; align-items:center; font-size:11px; font-weight:800; }
+                        .receipt-preview .ps-kpi.ok { background:#ecfdf5; border-color:#6ee7b7; color:#065f46; }
+                        .receipt-preview .ps-kpi.bad { background:#fff1f2; border-color:#fda4af; color:#9f1239; }
+                        .receipt-preview .ps-columns { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; }
+                        .receipt-preview .ps-mini-table { width:100%; border-collapse:collapse; font-size:9px; }
+                        .receipt-preview .ps-mini-table th { background:#1e293b; color:#fff; padding:3px 4px; text-align:left; }
+                        .receipt-preview .ps-mini-table td { padding:2.5px 4px; border:1px solid #cbd5e1; }
+                        .receipt-preview .ps-mini-table tr.ok { background:#f0fdf4; }
+                        .receipt-preview .ps-mini-table tr.bad { background:#fff1f2; }
+                        .receipt-preview .ps-st-ok { color:#059669; font-weight:800; }
+                        .receipt-preview .ps-st-bad { color:#e11d48; font-weight:800; }
+                        .receipt-preview .ps-signatures { margin-top:16px; display:flex; justify-content:space-between; gap:24px; }
+                        .receipt-preview .ps-sig-box { flex:1; border-top:1px solid #475569; padding-top:4px; text-align:center; font-size:10px; color:#475569; }
+                    }
+                    @media print {
+                        .receipt-preview { display: none !important; }
+                    }
+                `;
+                docClone.querySelector('head').appendChild(extraStyle);
+
+                const safeName = r.cashierName.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ_-]/g, '_');
+                const safeBadge = r.cashierBadge.replace(/[^a-zA-Z0-9_-]/g, '_');
+                const fileName = `Resultado_${safeName}_${safeBadge}.html`;
+
+                const fullHtml = '<!DOCTYPE html>\n' + docClone.outerHTML;
+                const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+                showToast(`Comprobante "${fileName}" descargado. El cajero puede enviártelo por WhatsApp o correo.`);
+            } catch (err) {
+                showToast('No se pudo generar el archivo de comprobante.', true);
+            }
         }
 
         /* ==========================================================================
@@ -1573,6 +2042,7 @@
                     document.getElementById('results-panel').classList.add('hidden');
                     document.getElementById('th-eval').classList.add('hidden');
                     document.getElementById('submit-bar').classList.remove('hidden');
+                    document.getElementById('print-sheet').innerHTML = '';
 
                     if (isShuffled) {
                         document.getElementById('btn-original').classList.remove('hidden');
